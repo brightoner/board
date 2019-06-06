@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+
+	<!-- 게시판 생성 -->
+	<select id="insertBoard" parameterType="boardVo">
+		INSERT INTO BOARD(
+		board_id
+		,userid
+		,board_name
+		,use_yn
+		,reg_dt
+		) VALUES (
+		board_seq.nextval
+		,#{userid}
+		,#{board_name}
+		,#{use_yn}
+		,sysdate)
+	</select>
+	
+	<!-- 자유게시판 전체 가져오기 -->
+	<select id="boardList" resultType="postVo">
+		select *
+		from post
+	</select>
+	
+	<!-- 자유게시판 페이징처리 -->
+	<select id="boardPagingList" parameterType="pageVo" resultType="postVo">
+		<![CDATA[
+		select *
+		from
+		(select a.*, rownum rn
+		from
+		(select a.*
+		from post a
+		order by post_id) a)
+		where rn >= (#{page}-1)*#{pageSize} + 1 and rn <= #{page}*#{pageSize}
+		
+		]]>
+		
+	</select>
+	
+	<!-- 모든 게시판 정보 조회 -->
+	<select id="allBoardList" resultType="boardVo">
+		select *
+		from board
+	</select>
+	
+
+</mapper>
