@@ -69,4 +69,34 @@
     <servlet-name>PostController</servlet-name>
     <url-pattern>/PostController</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>InsertUser</display-name>
+    <servlet-name>InsertUser</servlet-name>
+    <servlet-class>kr.or.ddit.board.controller.InsertUser</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>InsertUser</servlet-name>
+    <url-pattern>/InsertUser</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AllBoardController</display-name>
+    <servlet-name>AllBoardController</servlet-name>
+    <servlet-class>kr.or.ddit.board.controller.AllBoardController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AllBoardController</servlet-name>
+    <url-pattern>/AllBoardController</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>PostModify</display-name>
+    <servlet-name>PostModify</servlet-name>
+    <servlet-class>kr.or.ddit.board.controller.PostModify</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PostModify</servlet-name>
+    <url-pattern>/PostModify</url-pattern>
+  </servlet-mapping>
 </web-app>

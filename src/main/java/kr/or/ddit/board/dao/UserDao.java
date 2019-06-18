@@ -20,6 +20,7 @@ public class UserDao implements IUserDao {
 	public List<UserVo> userList() {
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		List<UserVo> userList = sqlSession.selectList("user.userList");
+		sqlSession.commit();
 		sqlSession.close();
 		return userList;
 	}
@@ -36,6 +37,7 @@ public class UserDao implements IUserDao {
 	public UserVo getUser(String userId) {
 		SqlSession sqlSession = MyBatisUtil.getSqlSession();
 		UserVo userVo = sqlSession.selectOne("user.getUser", userId);
+		sqlSession.commit();
 		sqlSession.close();
 		return userVo;
 	}

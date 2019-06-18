@@ -8,6 +8,8 @@
 		<typeAlias alias="pageVo" type="kr.or.ddit.board.model.PageVo"/>
 		<typeAlias alias="boardVo" type="kr.or.ddit.board.model.BoardVo"/>
 		<typeAlias alias="postVo" type="kr.or.ddit.board.model.PostVo"/>
+		<typeAlias alias="attachVo" type="kr.or.ddit.board.model.AttachVo"/>
+		<typeAlias alias="replyVo" type="kr.or.ddit.board.model.ReplyVo"/>
 	</typeAliases>
 
   <environments default="development">
@@ -16,7 +18,7 @@
       <dataSource type="POOLED">
         <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
         <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
-        <property name="username" value="pc22"/>
+        <property name="username" value="jk"/>
         <property name="password" value="java"/>
       </dataSource>
     </environment>

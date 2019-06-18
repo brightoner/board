@@ -20,26 +20,45 @@
 		,sysdate)
 	</select>
 	
-	<!-- 자유게시판 전체 가져오기 -->
+	<!-- 게시판(post) 전체 가져오기 -->
 	<select id="boardList" resultType="postVo">
 		select *
 		from post
 	</select>
 	
-	<!-- 자유게시판 페이징처리 -->
-	<select id="boardPagingList" parameterType="pageVo" resultType="postVo">
+	<!-- 특정 전체 수 조회 -->
+	<select id="postCnt" resultType="int" parameterType="int">
+		select count(*)
+		from post
+		where board_id = #{board_id}
+	</select>
+	
+	<!-- 게시판 페이징처리 -->
+	<select id="boardPagingList" parameterType="Map" resultType="postVo">
 		<![CDATA[
-		select *
-		from
-		(select a.*, rownum rn
-		from
-		(select a.*
-		from post a
-		order by post_id) a)
-		where rn >= (#{page}-1)*#{pageSize} + 1 and rn <= #{page}*#{pageSize}
-		
+		   select b.*, rownum rn
+      from
+      (select a.*, rownum rn
+         from
+         (select p.post_id, p.userid, p.title, level-1 lv, p.content,
+               p.post_date, p.parent_id, p.board_id, p.postuse_yn, p.group_seq
+            from post p
+               where BOARD_ID = #{board_id}
+               start with parent_id is null
+               Connect by prior post_id = parent_id
+               order siblings by group_seq desc, post_id)a)b
+               
+               where b.rn >= (#{page}-1)*#{pageSize} and b.rn<= #{page}*#{pageSize}
 		]]>
 		
+	</select>
+	
+	
+	
+	<!-- 게시판 전체 수 조회 -->
+	<select id="boardCnt" resultType="int">
+		select count(*)
+		from board
 	</select>
 	
 	<!-- 모든 게시판 정보 조회 -->
@@ -48,5 +67,190 @@
 		from board
 	</select>
 	
+	<!-- 사용중 (1) 인 게시판 정보 조회 -->
+	<select id="useBoardList" resultType="boardVo" parameterType="string">
+		select * 
+		from board
+		where use_yn = #{use_yn}
+	</select>
+	
+	<!-- 사용중인 게시판 -->
+	<select id="useYBoard" resultType="boardVo">
+		SELECT * FROM BOARD WHERE USE_YN='1'
+	</select>
+	
+	<!-- 특정 게시판(board) 조회 -->
+	<select id="getBoard" resultType="boardVo" parameterType="int">
+		select * 
+		from board
+		where board_id = #{board_id}
+	</select>
+	
+	<!-- 특정 게시판 (post) 목록조회 -->
+	<select id="getPost" resultType="postVo" parameterType="int">
+		select *
+		from post
+		where post_id = #{post_id}
+	
+	</select>
+	
+	<!-- 특정게시판 모든정보 조회 -->
+	<select id="getAllPost" resultType="postVo" parameterType="int">
+		select *
+		from post
+		where board_id = #{board_id}
+	</select>
+	
+	
+	<!-- 게시판 활성화 유무 수정 -->
+	<select id="updateUseBoard" parameterType="boardVo">
+		update Board 
+		set use_yn = #{use_yn}
+		where board_id = #{board_id}
+	</select>
+	
+	
+	
+
+
+
+   
+   <!-- 답글 insert -->
+   <insert id="insertRePost" parameterType="postVo">
+   		insert into post
+   		values(
+   		 post_seq.nextval
+   		,#{userid}
+   		,#{title}
+   		,#{content}
+   		,sysdate
+   		,#{parent_id}
+   		,#{board_id}
+   		,'1'
+   		,#{group_seq}
+   		)
+   </insert>
+
+	<!-- 신규 등록-->
+	<insert id="insertPost" parameterType="postVo">
+   		insert into post
+   		values(
+   		 post_seq.nextval
+   		,#{userid}
+   		,#{title}
+   		,#{content}
+   		,sysdate
+   		,''
+   		,#{board_id}
+   		,'1'
+   		,post_seq.nextval
+   		)
+   </insert>
+	
+	
+	<!-- 게시글 등록시 사용중인 게시글 상세보기로 가기(가장최근 == post_id가 가장큰수)-->
+	<select id="currentPost" resultType="int">
+		select max(post_id)
+		from post
+	</select>
+	
+<!-- 	게시글 update(수정) -->
+	<update id="updatePost" parameterType="postVo">
+		update post
+		set title = #{title}
+		   ,content = #{content}
+		where post_id = #{post_id}
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<update id="deletePost" parameterType="int">
+		update post 
+		set postUse_yn = '2'
+		where post_id = #{post_id}
+	</update>
+	
+	<!-- 사용중인 post만 조회 -->
+	<select id="getUsePost" resultType="postVo" parameterType="string">
+		select * 
+		from post
+		where postuse_yn = '1'
+	</select>
+	
+	
+		
+	
+	
+	<!-- 댓글 쓰기(생성) -->
+	<insert id="insertReply" parameterType="replyVo">
+		insert into reply( reply_id
+						  ,post_id
+						  ,reply_content
+						  ,reply_date
+						  ,userid
+						  ,reuse_yn
+					)values(reply_seq.nextval
+						   ,#{post_id}
+						   ,#{reply_content}
+						   ,sysdate
+						   ,#{userid}
+						   ,'1'
+					)
+					
+	</insert>
+	
+	
+	<!-- 댓글 검색 -->
+	<select id="getReply" parameterType="int" resultType="replyVo">
+		select *
+		from reply
+		where post_id = #{post_id}
+	</select>
+	
+	<!-- 사용중인 뎃글 -->
+	<select id="getUseReply" resultType="replyVo" parameterType="string">
+		select * 
+		from reply
+		where reuse_yn = '1'
+	</select>
+	
+	<!-- 뎃글 비활성화(삭제) -->
+	<update id="deleteRePost" parameterType="int">
+		update reply 
+		set reuse_yn = '2'
+		where reply_id = #{reply_id}
+	</update>
+	
+	
+	<!-- 첨부파일 -->
+	
+	<insert id="insertAttach" parameterType="attachVO">
+		insert into attach
+		values (attach_seq.nextval, #{post_id}, #{path}, #{filename})
+	</insert>
+	
+	<select id="getAttach" parameterType="int" resultType="attachVO">
+		select	*
+		from	attach
+		where	post_id = #{post_id}
+	</select>
+	
+	<select id="getFile" parameterType="String" resultType="attachVO">
+		select	*
+		from	attach
+		where	attach_id = #{attach_id}
+	</select>
+	
+	<delete id="deleteFile" parameterType="String">
+		delete	
+		from	attach
+		where	attach_id = #{attach_id}
+	</delete>
+	
+	
+
 
 </mapper>
+
+
+
+

@@ -1,3 +1,5 @@
+<%@page import="kr.or.ddit.board.model.PostVo"%>
+<%@page import="kr.or.ddit.board.model.BoardVo"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -14,10 +16,36 @@
 <meta name="author" content="">
 <link rel="icon" href="../../favicon.ico">
 
-<title>${boardVo.board_name }</title>
+<%-- <title>${boardVo.board_name }</title> --%>
+<title>${boardVo.board_id }</title>
 
 <!-- scc, js -->
 <%@include file="/common/basicLib.jsp" %>
+
+<style>
+	.boardTr:hover{
+		cursor:pointer;
+	}
+</style>
+
+
+<script>
+$(document).ready(function(){
+	
+	$(".boardTr").on("click",function(){
+		
+		var postnum = $(this).find(".post").text();
+		$("#post").val(postnum);
+		
+		$("#frm").submit();
+		
+	});
+});
+
+
+</script>
+
+
 
 </head>
 
@@ -36,9 +64,10 @@
 					<div class="col-sm-8 blog-main">
 						<h2 class="sub-header">${boardVo.board_name }</h2>
 						
-<!-- 						사용자 상세 조회 : userId가 필요 -->
+<!-- 						게시글 상세 조회 : userId가 필요 -->
 						<form id="frm" action="${pageContext.request.contextPath }/post" method="get">
-							<input type="hidden" id="userId" name="userId"/>
+							<input type="hidden" id="post" name="post_id" value="${postVo.post_id }"/>
+							<input type="hidden" id="board_id" name="board_id" value="${board_id }"/>
 						</form>
 						
 						<div class="table-responsive">
@@ -50,21 +79,43 @@
 									<th>작성일시</th>
 								</tr>
 								
-								<c:forEach items="${postList }" var="vo" varStatus="status">
-									<tr>
-										<td>${vo.post_id }</td>
-										<td>${vo.title}</td>
-										<td>${vo.userid }</td>
-										<td>${vo.reg_dt }</td>
-									</tr>
+								<c:forEach items="${postList }" var="postList" varStatus="status">
+									<c:choose>
+										<c:when test="${postList.postuse_yn =='1' }">
+											<tr class="boardTr" data-userid="${postList.userid }">
+												<td class="post">${postList.post_id }</td>
+												<td>
+												
+													<c:choose >
+													<c:when test="${postList.lv > 0}">
+														
+												<c:forEach items="${postList.lv }">
+														&nbsp;&nbsp;&nbsp;
+												</c:forEach> re: ${postList.title}
+													</c:when>
+													<c:otherwise>
+														${postList.title}
+													</c:otherwise>
+													</c:choose>
+												
+												</td>
+												<td>${postList.userid }</td>
+												<td>${postList.post_date }</td>
+											</tr>
+										</c:when>
+										<c:otherwise>
+											<tr>
+												<td>삭제된게시물입니다</td>
+											</tr>
+										</c:otherwise>
+									</c:choose>
 								</c:forEach>
 															
 							</table>
 						</div>
 
-						<a class="btn btn-default pull-right">사용자 등록</a>
-
-						<!-- 사용자 수 : 105건 // 페이지 네이션 : 11건 -->
+						<a href="${pageContext.request.contextPath }/insertPost?board_id=${board_id}" class="btn btn-default pull-right">새글등록</a>
+						<!-- 게시글 수 // 페이지 네이션 건 -->
 						<div class="text-center">
 							<ul class="pagination">
 							
@@ -72,8 +123,8 @@
 									<c:when test="${pageVo.page == 1 }">
 										<li class="disabled"><span>«</span></li>
 									</c:when>
-									<c:otherwise>
-										<li><a href="${pageContext.request.contextPath }/boardPagingList?page=${pageVo.page -1 }&pageSize=${pageVo.pageSize }">«</a></li>
+									<c:otherwise>													
+										<li><a href="${pageContext.request.contextPath }/boardList?board_id=${board_id }&page=${pageVo.page -1 }&pageSize=${pageVo.pageSize }">«</a></li>
 									</c:otherwise>
 								
 								</c:choose>
@@ -87,7 +138,7 @@
 									</c:when>
 									<c:otherwise>
 										<li>
-									 		<a href="${pageContext.request.contextPath}/boardPagingList?page=${i }&pageSize=${pageVo.pageSize }">${i }</a>
+									 		<a href="${pageContext.request.contextPath}/boardList?board_id=${board_id }&page=${i }&pageSize=${pageVo.pageSize }">${i }</a>
 									 	<li>
 									</c:otherwise>
 								</c:choose>
@@ -98,7 +149,7 @@
 										<li class="disabled"><span>»</span></li>
 									</c:when>
 									<c:otherwise>
-										<li><a href="${pageContext.request.contextPath}/boardPagingList?page=${pageVo.page +1 }&pageSize=${pageVo.pageSize }">»</a></li>
+										<li><a href="${pageContext.request.contextPath}/boardList?board_id=${board_id }&page=${pageVo.page +1 }&pageSize=${pageVo.pageSize }">»</a></li>
 									</c:otherwise>
 								</c:choose>
 							

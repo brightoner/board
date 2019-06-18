@@ -11,9 +11,54 @@ public class PostVo {
 	private Date post_date;
 	private int parent_id;
 	private int board_id;
+	private String postuse_yn;
+	private int group_seq;
+	private int lv;
 	
+
+
+	public int getLv() {
+		return lv;
+	}
+
+
+
+
+	public void setLv(int lv) {
+		this.lv = lv;
+	}
+
+
+
+
+	public int getGroup_seq() {
+		return group_seq;
+	}
+
+
+
+
+	public void setGroup_seq(int group_seq) {
+		this.group_seq = group_seq;
+	}
+
+
+
+
+	public PostVo(int post_id, String userid, String title, 
+			String postuse_yn) {
+		super();
+		this.post_id = post_id;
+		this.userid = userid;
+		this.title = title;
+		this.postuse_yn = postuse_yn;
+	}
+
+
+
+
 	public PostVo(int post_id, String userid, String title, String content,
-			Date post_date, int parent_id, int board_id) {
+			Date post_date, int parent_id, int board_id, String postuse_yn) {
 		super();
 		this.post_id = post_id;
 		this.userid = userid;
@@ -22,7 +67,42 @@ public class PostVo {
 		this.post_date = post_date;
 		this.parent_id = parent_id;
 		this.board_id = board_id;
+		this.postuse_yn = postuse_yn;
 	}
+
+
+
+
+	public PostVo(int post_id, String title, String content) {
+		this.post_id = post_id;
+		this.title = title;
+		this.content = content;
+	}
+
+
+
+
+	public String getPostuse_yn() {
+		return postuse_yn;
+	}
+
+
+
+
+	public void setPostuse_yn(String postuse_yn) {
+		this.postuse_yn = postuse_yn;
+	}
+
+
+
+
+	public PostVo(String title, String content) {
+		this.title = title;
+		this.content = content;
+	}
+
+
+
 
 	@Override
 	public String toString() {

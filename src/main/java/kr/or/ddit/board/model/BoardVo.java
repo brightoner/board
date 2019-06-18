@@ -12,15 +12,20 @@ public class BoardVo {
 
 	
 	public BoardVo(int board_id, Date reg_dt) {
-		super();
 		this.board_id = board_id;
 		this.reg_dt = reg_dt;
 	}
 
 
-	public BoardVo(String userid, String board_name, String use_yn) {
-		super();
-		this.userid = userid;
+	public BoardVo(int board_id, String board_name, String use_yn) {
+		this.board_id = board_id;
+		this.board_name = board_name;
+		this.use_yn = use_yn;
+	}
+
+	
+
+	public BoardVo(String board_name, String use_yn) {
 		this.board_name = board_name;
 		this.use_yn = use_yn;
 	}

@@ -14,15 +14,26 @@
 <meta name="author" content="">
 <link rel="icon" href="../../favicon.ico">
 
-<title>Jsp</title>
+<title>게시판등록</title>
+
 
 <!-- css, js -->
 <%@include file="/common/basicLib.jsp" %>
 
 <script>
 $(document).ready(function(){
+	
+	//생성
 	$("#createBtn").on("click", function(){
+		
 		$("#createfrm").submit();
+		
+	});
+	
+	//수정
+	$("#changeBtn").on("click", function(){
+		
+		$("#changefrm").submit();
 	});
 	
 });
@@ -53,29 +64,41 @@ $(document).ready(function(){
 
 	<div class="col-sm-8 blog-main">
 
-		<form action="${pageContext.request.contextPath }/createBoard" id="createfrm"  method="post">
+		<form action="${pageContext.request.contextPath }/manageBoard" id="createfrm"  method="post">
 		게시판이름 :
 		<input type="text" name="createBoard" id="createBoard" class="createBoard" >
 		<input type="hidden" id="userId" name="userId" value="${USER_INFO.userid }"/>
-		<select name="combo" form="createfrm">
+		<select name="combo">
 			<option value="1">사용</option>
 			<option value="2">미사용</option>
 		</select>
 		<button id="createBtn" type="submit" >생성</button>
-		<br><br>
+		</form>
+		<br>
 	
-		<c:forEach items="${boardList }" var="vo" varStatus="status">
-			게시판이름 :
-			<input type="text" name="createBoard" id="createBoard" class="createBoard" value="${vo.board_name }">
-			<select name="combo" form="createfrm">
-				<option value="1">사용</option>
-				<option value="2">미사용</option>
-			</select>
-			<button class="createBtn" type="submit" >수정</button>
-			<br><br>
-		</c:forEach>
 	
-	</form>
+			<c:forEach items="${boardList}" var="vo" varStatus="status">
+			<form action="${pageContext.request.contextPath }/useBoard" id="changefrm"  method="post">
+		<table>
+				<tr >
+					<td>
+						게시판이름 :<input type="text" name="changeBoard" id="changeBoard" class="changeBoard" value="${vo.board_name }">
+							<input type="hidden" name="board_id" id="board_id" class="board_id" value="${vo.board_id}">
+					</td>
+					<td>
+						<select name="use_yn" name="use_yn">
+							<option value="1">사용</option>
+							<option value="2">미사용</option>
+						</select>
+					</td>
+					<td>
+						<button class="changeBtn" type="submit" >수정</button>
+					</td>
+				</tr>
+		</table>
+			</form>
+			</c:forEach>
+	
 	
 	</div>
 	<!-- /.blog-main -->

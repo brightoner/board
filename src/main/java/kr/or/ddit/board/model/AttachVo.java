@@ -24,6 +24,15 @@ public class AttachVo {
 	public AttachVo(){
 		
 	}
+	
+	
+
+	public AttachVo(int post_id, String path, String filename) {
+		super();
+		this.post_id = post_id;
+		this.path = path;
+		this.filename = filename;
+	}
 
 	public String getAttach_id() {
 		return attach_id;
