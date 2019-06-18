@@ -2,10 +2,10 @@ package kr.or.ddit.board.dao;
 
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
-
 import kr.or.ddit.board.model.UserVo;
 import kr.or.ddit.mybatis.MyBatisUtil;
+
+import org.apache.ibatis.session.SqlSession;
 
 public class UserDao implements IUserDao {
 

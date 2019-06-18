@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-	<properties resource="kr/or/ddit/config/mybatis/db.properties"/>
+	<properties resource="kr/or/ddit/config/mybatis/db_board.properties"/>
 
 	<typeAliases>
 		<typeAlias alias="userVo" type="kr.or.ddit.board.model.UserVo"/>

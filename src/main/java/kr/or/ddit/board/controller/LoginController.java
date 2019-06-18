@@ -63,8 +63,8 @@ public class LoginController extends HttpServlet {
 		List<BoardVo> boardList = boardService.allBoardList();
 		
 		
-//		if(userVo != null && encyptPassword.equals(userVo.getPass())){
-		if(userVo != null && password.equals(userVo.getPass())){
+		if(userVo != null && encyptPassword.equals(userVo.getPass())){
+//		if(userVo != null && password.equals(userVo.getPass())){
 			
 			
 			HttpSession session = request.getSession();
