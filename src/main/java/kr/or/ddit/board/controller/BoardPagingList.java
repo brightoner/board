@@ -16,7 +16,6 @@ import kr.or.ddit.board.model.PageVo;
 import kr.or.ddit.board.model.PostVo;
 import kr.or.ddit.board.service.BoardService;
 
-import org.apache.catalina.connector.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
